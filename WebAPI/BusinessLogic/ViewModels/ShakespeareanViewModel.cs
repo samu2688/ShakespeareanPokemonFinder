@@ -1,21 +1,20 @@
 namespace BusinessLogic.ViewModels
 {
-    internal class ShakespeareanViewModel
+    public class Success
     {
-        internal Success Success { get; set; }
-
-        internal Contents Contents { get; set; }
+        public int total { get; set; }
     }
 
-    internal class Success
+    public class Contents
     {
-        internal int Total { get; set; }
+        public string translated { get; set; }
+        public string text { get; set; }
+        public string translation { get; set; }
     }
 
-    internal class Contents
+    public class ShakespeareanViewModel
     {
-        internal string Translated { get; set; }
-        internal string Text { get; set; }
-        internal string Translation { get; set; }
+        public Success success { get; set; }
+        public Contents contents { get; set; }
     }
 }

@@ -18,41 +18,34 @@ namespace BusinessLogic.Utils
             int pauseBetweenFailures = 10)
         {
             string returnString = null;
-            try
+            logger.LogTrace($"Starting {endpoint} request (param {param})");
+
+            client.DefaultRequestHeaders.Clear();
+            //client.DefaultRequestHeaders.Add("Accept", Environment.GetEnvironmentVariable("ECBSdmxFormat"));
+
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            //using a simple retry policy using Polly for resilience
+            var pauseBetweenFailuresTimeSpan = TimeSpan.FromSeconds(pauseBetweenFailures);
+            var retryPolicy = Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(maxRetryAttempts, i => pauseBetweenFailuresTimeSpan);
+
+            await retryPolicy.ExecuteAsync(async () =>
             {
-                logger.LogTrace($"Starting {endpoint} request (param {param})");
+                response = await client.GetAsync(string.Format(endpoint, param));
+            });
 
-                client.DefaultRequestHeaders.Clear();
-                //client.DefaultRequestHeaders.Add("Accept", Environment.GetEnvironmentVariable("ECBSdmxFormat"));
-
-                HttpResponseMessage response = new HttpResponseMessage();
-
-                //using a simple retry policy using Polly for resilience
-                var pauseBetweenFailuresTimeSpan = TimeSpan.FromSeconds(pauseBetweenFailures);
-                var retryPolicy = Policy
-                    .Handle<HttpRequestException>()
-                    .WaitAndRetryAsync(maxRetryAttempts, i => pauseBetweenFailuresTimeSpan);
-
-                await retryPolicy.ExecuteAsync(async () =>
-                {
-                    response = await client.GetAsync(string.Format(endpoint, param));
-                });
-
-                if (response.IsSuccessStatusCode)
-                {
-                    returnString = await response.Content.ReadAsStringAsync();
-                    logger.LogDebug("Response status: {0}; Response body: {0}", (int)response.StatusCode, returnString);
-                }
-                else
-                {
-                    logger.LogDebug("Response status: {0}", (int)response.StatusCode);
-                }
-            }
-            catch (Exception ex)
+            if (response.IsSuccessStatusCode)
             {
-                logger.LogError(ex, $"Error calling {endpoint} request (param {param})");
+                returnString = await response.Content.ReadAsStringAsync();
+                logger.LogDebug("Response status: {0}; Response body: {0}", (int)response.StatusCode, returnString);
             }
-                
+            else
+            {
+                logger.LogDebug("Response status: {0}", (int)response.StatusCode);
+            }
+
             return returnString;
         }
 

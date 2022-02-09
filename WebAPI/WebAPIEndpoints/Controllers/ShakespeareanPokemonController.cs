@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BusinessLogic;
+using System.Threading.Tasks;
 
 namespace WebAPIEndpoints.Controllers
 {
@@ -18,10 +19,9 @@ namespace WebAPIEndpoints.Controllers
         }
 
         [HttpGet(Name = "GetShakespeareanTranslation")]
-        public string Get(string pokemon)
+        public async Task<string> Get(string pokemonName)
         {
-            var pokemonDesc = _businessService.GetPokemonDesc(pokemon).Result;
-            var shakespeareanTranslation = _businessService.GetShakespeareanTranslation(pokemonDesc).Result;
+            var shakespeareanTranslation = await _businessService.GetTranslation(pokemonName);
             return shakespeareanTranslation;
         }
     }
