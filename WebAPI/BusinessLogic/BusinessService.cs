@@ -31,6 +31,10 @@ namespace BusinessLogic
             try
             {
                 var pokemonDesc = await GetPokemonDesc(pokemonName);
+                if (String.IsNullOrWhiteSpace(pokemonDesc))
+                {
+                    return null;
+                }
                 var transalation = await GetShakespeareanTranslation(pokemonDesc);
                 if (String.IsNullOrWhiteSpace(transalation))
                 {
@@ -50,8 +54,12 @@ namespace BusinessLogic
         {
             var endpoint = _configuration["PokemonEndpoint"];
             var response = await SimpleHttpClient.CallAPI(endpoint, pokemonName, _logger, _maxRetryAttempts, _pauseBetweenFailures);
-            PokemonViewModel model = JsonSerializer.Deserialize<PokemonViewModel>(response);
+            if (response == null)
+            {
+                return null;
+            }
 
+            PokemonViewModel model = JsonSerializer.Deserialize<PokemonViewModel>(response);
             //It is possible to receive multiple entries -> select only the english ones and, among them, take the first
             //This rule is not specified in the requirements but make sense -> to BE VERIFIED during testing
             return CleanText(model?.flavor_text_entries?.Where(x => x.language.name == "en").FirstOrDefault()?.flavor_text);
@@ -61,6 +69,11 @@ namespace BusinessLogic
         {
             var endpoint = _configuration["ShakespeareTranslatorEndpoint"];
             var response = await SimpleHttpClient.CallAPI(endpoint, text, _logger, _maxRetryAttempts, _pauseBetweenFailures);
+            if (response == null)
+            {
+                return null;
+            }
+
             ShakespeareanViewModel model = JsonSerializer.Deserialize<ShakespeareanViewModel>(response);
             return CleanText(model?.contents?.translated);
         }

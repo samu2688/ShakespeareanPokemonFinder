@@ -27,7 +27,6 @@ namespace WebAPIEndpoints
             {
                 // configure Logging with NLog
                 builder.ClearProviders();
-                builder.SetMinimumLevel(LogLevel.Trace);
                 builder.AddNLog("NLog.config");
             });
             services.AddSwaggerGen();
