@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BusinessLogic.ViewModels
+namespace ViewModels.Data
 {
     public class Color
     {

@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using ViewModels.Data;
 
 namespace BusinessLogic
 {
     public interface IBusinessService
     {
-        public Task<string> GetTranslation(string pokemonName);
+        public Task<ResultViewModel> GetTranslation(string pokemonName);
     }
 }

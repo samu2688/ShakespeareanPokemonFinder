@@ -1,4 +1,4 @@
-namespace BusinessLogic.ViewModels
+namespace ViewModels.Data
 {
     public class Success
     {

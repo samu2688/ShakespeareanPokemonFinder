@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BusinessLogic;
 using System.Threading.Tasks;
+using System.Text.Json;
+using ViewModels.Data;
 
 namespace WebAPIEndpoints.Controllers
 {
@@ -19,10 +21,11 @@ namespace WebAPIEndpoints.Controllers
         }
 
         [HttpGet(Name = "GetShakespeareanTranslation")]
-        public async Task<string> Get(string pokemonName)
+        public ActionResult Get(string pokemonName)
         {
-            var shakespeareanTranslation = await _businessService.GetTranslation(pokemonName);
-            return shakespeareanTranslation;
+            ResultViewModel shakespeareanTranslation = _businessService.GetTranslation(pokemonName).Result;
+            //string result = JsonSerializer.Serialize(shakespeareanTranslation);
+            return new JsonResult(shakespeareanTranslation);
         }
     }
 }

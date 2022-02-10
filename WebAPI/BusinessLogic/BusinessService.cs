@@ -1,13 +1,13 @@
 ﻿using BusinessLogic.Utils;
-using BusinessLogic.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-//using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using ViewModels.Data;
+using ViewModels.Enum;
 
 namespace BusinessLogic
 {
@@ -26,28 +26,35 @@ namespace BusinessLogic
             _pauseBetweenFailures = Convert.ToInt32(_configuration["PauseBetweenFailures"]);
         }
 
-        public async Task<string> GetTranslation(string pokemonName)
+        public async Task<ResultViewModel> GetTranslation(string pokemonName)
         {
+            ResultViewModel resultViewModel = new ResultViewModel();
+            resultViewModel.HasError = false;
             try
             {
                 var pokemonDesc = await GetPokemonDesc(pokemonName);
                 if (String.IsNullOrWhiteSpace(pokemonDesc))
                 {
-                    return null;
+                    resultViewModel.Status = ResultEnum.RESULT.NO_DATA.ToString();
                 }
-                var transalation = await GetShakespeareanTranslation(pokemonDesc);
-                if (String.IsNullOrWhiteSpace(transalation))
+                else
                 {
-                    transalation = pokemonDesc;
+                    var transalation = await GetShakespeareanTranslation(pokemonDesc);
+                    if (String.IsNullOrWhiteSpace(transalation))
+                    {
+                        transalation = pokemonDesc;
+                    }
+                    resultViewModel.Translation = transalation;
+                    resultViewModel.Status = ResultEnum.RESULT.OK.ToString();
                 }
-
-                return transalation;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error on retrieving data");
-                return null;
+                resultViewModel.Status = ResultEnum.RESULT.ERROR.ToString();
             }
+
+            return resultViewModel;
         }
 
         private async Task<string> GetPokemonDesc(string pokemonName)
