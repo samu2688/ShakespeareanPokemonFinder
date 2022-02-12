@@ -1,8 +1,6 @@
+using BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using BusinessLogic;
-using System.Threading.Tasks;
-using System.Text.Json;
 using ViewModels.Data;
 
 namespace WebAPIEndpoints.Controllers

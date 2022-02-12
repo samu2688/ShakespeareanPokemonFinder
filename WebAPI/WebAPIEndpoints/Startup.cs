@@ -30,6 +30,13 @@ namespace WebAPIEndpoints
                 builder.AddNLog("NLog.config");
             });
             services.AddSwaggerGen();
+            services.AddCors(options =>
+                options.AddPolicy("AllowCorsPolicy",
+                    builder => {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    }
+                )
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +46,8 @@ namespace WebAPIEndpoints
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("AllowCorsPolicy");
 
             app.UseHttpsRedirection();
 

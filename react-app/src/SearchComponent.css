@@ -1,0 +1,17 @@
+
+.search-input {
+    width: 40vmin;
+  }
+  
+  .search-card {
+    background: url(./Images/shakespeare.jpg) no-repeat center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-size: 40px;
+    font-style: italic;
+    text-align: 'center';
+    font-weight: 'bold';
+    width: 800px;
+  }
