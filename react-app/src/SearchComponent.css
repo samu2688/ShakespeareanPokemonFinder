@@ -13,5 +13,5 @@
     font-style: italic;
     text-align: 'center';
     font-weight: 'bold';
-    width: 800px;
+    max-width: 800px;
   }

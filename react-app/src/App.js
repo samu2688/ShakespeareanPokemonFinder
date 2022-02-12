@@ -1,5 +1,4 @@
 import logo from './Images/poke.png';
-import background from './Images/backgrounds.jpg';
 import './App.css';
 import SearchComponent   from './SearchComponent';
 

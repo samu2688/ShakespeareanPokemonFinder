@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using System;
 
 namespace WebAPIEndpoints
 {
@@ -33,7 +34,8 @@ namespace WebAPIEndpoints
             services.AddCors(options =>
                 options.AddPolicy("AllowCorsPolicy",
                     builder => {
-                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == Configuration["AllowedOriginHost"]);
+                        //builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                     }
                 )
             );
