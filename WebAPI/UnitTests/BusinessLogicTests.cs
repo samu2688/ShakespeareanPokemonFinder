@@ -50,6 +50,7 @@ namespace UnitTests
         {
             // Act
             var responseOK = _businessService.GetTranslation("Pikachu").Result;
+            var responseWRONG_DATA = _businessService.GetTranslation(null).Result;
             var responseNO_DATA = _businessService.GetTranslation(null).Result;
 
             // Assert
@@ -60,6 +61,10 @@ namespace UnitTests
             Assert.AreEqual(responseNO_DATA.HasError, true);
             Assert.AreEqual(responseNO_DATA.Status, ResultEnum.RESULT.NO_DATA.ToString());
             Assert.IsNull(responseNO_DATA.Translation);
+
+            Assert.AreEqual(responseWRONG_DATA.HasError, true);
+            Assert.AreEqual(responseWRONG_DATA.Status, ResultEnum.RESULT.NO_DATA.ToString());
+            Assert.IsNull(responseWRONG_DATA.Translation);
         }
 
 
