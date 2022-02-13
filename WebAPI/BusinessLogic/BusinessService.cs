@@ -32,10 +32,12 @@ namespace BusinessLogic
             resultViewModel.HasError = false;
             try
             {
-                var pokemonDesc = await GetPokemonDesc(pokemonName);
+                //to lower is necessary in order to make API working properly
+                var pokemonDesc = await GetPokemonDesc(pokemonName?.ToLower());
                 if (String.IsNullOrWhiteSpace(pokemonDesc))
                 {
                     resultViewModel.Status = ResultEnum.RESULT.NO_DATA.ToString();
+                    resultViewModel.HasError = true;
                 }
                 else
                 {
@@ -52,6 +54,7 @@ namespace BusinessLogic
             {
                 _logger.LogError(ex, $"Error on retrieving data");
                 resultViewModel.Status = ResultEnum.RESULT.ERROR.ToString();
+                resultViewModel.HasError = true;
             }
 
             return resultViewModel;
@@ -59,6 +62,11 @@ namespace BusinessLogic
 
         private async Task<string> GetPokemonDesc(string pokemonName)
         {
+            if (String.IsNullOrWhiteSpace(pokemonName))
+            {
+                return null;
+            }
+
             var endpoint = _configuration["PokemonEndpoint"];
             var response = await SimpleHttpClient.CallAPI(endpoint, pokemonName, _logger, _maxRetryAttempts, _pauseBetweenFailures);
             if (response == null)
@@ -74,6 +82,11 @@ namespace BusinessLogic
 
         private async Task<string> GetShakespeareanTranslation(string text)
         {
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                return null;
+            }
+
             var endpoint = _configuration["ShakespeareTranslatorEndpoint"];
             var response = await SimpleHttpClient.CallAPI(endpoint, text, _logger, _maxRetryAttempts, _pauseBetweenFailures);
             if (response == null)
