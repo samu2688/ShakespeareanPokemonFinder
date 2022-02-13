@@ -10,14 +10,14 @@ namespace UnitTests
     public class ControllerTests
     {
         private Mock<IBusinessService> _mockBusinessService;
-        private ShakespeareanPokemonController _controller;
+        private PokemonController _controller;
 
         [SetUp]
         public void SetUp()
         {
             //Arrange
             _mockBusinessService = new Mock<IBusinessService>();
-            _controller = new ShakespeareanPokemonController(_mockBusinessService.Object);
+            _controller = new PokemonController(_mockBusinessService.Object);
         }
 
         [Test]

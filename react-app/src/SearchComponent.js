@@ -18,7 +18,7 @@ export default function SearchComponent() {
 
   function handleOpen(e) {
     const pokemonName = inputRef.current.value
-    axios.get(configData.SERVER_URL + '/ShakespeareanPokemon?pokemonName=' + pokemonName)
+    axios.get(configData.SERVER_URL + '/pokemon?pokemon=' + pokemonName)
       .catch(
         res => {
           setTranslation(null)

@@ -7,19 +7,19 @@ namespace WebAPIEndpoints.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ShakespeareanPokemonController : ControllerBase
+    public class PokemonController : ControllerBase
     {
         private readonly IBusinessService _businessService;       
 
-        public ShakespeareanPokemonController(IBusinessService businessService)
+        public PokemonController(IBusinessService businessService)
         {
             _businessService = businessService;
         }
 
-        [HttpGet(Name = "GetShakespeareanTranslation")]
-        public ActionResult Get(string pokemonName)
+        [HttpGet]
+        public ActionResult Get(string pokemon)
         {
-            ResultViewModel shakespeareanTranslation = _businessService.GetTranslation(pokemonName).Result;
+            ResultViewModel shakespeareanTranslation = _businessService.GetTranslation(pokemon).Result;
             //string result = JsonSerializer.Serialize(shakespeareanTranslation);
             return new JsonResult(shakespeareanTranslation);
         }
